@@ -30,15 +30,14 @@ class TestBooksCollector:
     def test_add_new_book(self, book_name):
         collector = BooksCollector()
         collector.add_new_book(book_name)
-        assert book_name in collector.books_genre
-        assert collector.books_genre[book_name] == ''
+        assert book_name in collector.get_books_genre()
 
 
     def test_set_book_genre(self):
         collector = BooksCollector()
         collector.add_new_book("Человек-амфибия")
         collector.set_book_genre("Человек-амфибия", "Фантастика")
-        assert collector.books_genre["Человек-амфибия"] == "Фантастика"
+        assert collector.get_book_genre("Человек-амфибия") == "Фантастика"
 
     def test_get_book_genre(self):
         collector = BooksCollector()
@@ -71,14 +70,14 @@ class TestBooksCollector:
         collector = BooksCollector()
         collector.add_new_book("Человек-амфибия")
         collector.add_book_in_favorites("Человек-амфибия")
-        assert "Человек-амфибия" in collector.favorites
+        assert "Человек-амфибия" in collector.get_list_of_favorites_books()
 
     def test_delete_book_from_favorites(self):
         collector = BooksCollector()
         collector.add_new_book("Человек-амфибия")
         collector.add_book_in_favorites("Человек-амфибия")
         collector.delete_book_from_favorites("Человек-амфибия")
-        assert "Гарри Поттер" not in collector.favorites
+        assert "Человек-амфибия" not in collector.get_list_of_favorites_books()
 
     def test_get_list_of_favorites_books(self):
         collector = BooksCollector()
@@ -97,19 +96,19 @@ class TestBooksCollector:
     def test_set_book_genre_nonexistent_book(self):
         collector = BooksCollector()
         collector.set_book_genre("Неизвестная книга", "Фантастика")
-        assert "Неизвестная книга" not in collector.books_genre
+        assert "Неизвестная книга" not in collector.get_books_genre()
 
     def test_set_book_genre_invalid_genre(self):
         collector = BooksCollector()
         collector.add_new_book("Человек-амфибия")
         collector.set_book_genre("Человек-амфибия", "Неизвестный жанр")
-        assert collector.books_genre["Человек-амфибия"] == ''
+        assert collector.get_book_genre("Человек-амфибия") == ''
 
     @pytest.mark.parametrize("book_name", ["", "A" * 41])
     def test_add_new_book_invalid_name_length(self, book_name):
         collector = BooksCollector()
         collector.add_new_book(book_name)
-        assert book_name not in collector.books_genre
+        assert collector.get_book_genre(book_name) is None
 
     def test_add_book_in_favorites_already_exists(self):
         collector = BooksCollector()
@@ -118,4 +117,3 @@ class TestBooksCollector:
         collector.add_book_in_favorites("Человек-амфибия")
         favorites = collector.get_list_of_favorites_books()
         assert favorites.count("Человек-амфибия") == 1
-
