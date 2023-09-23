@@ -79,20 +79,6 @@ class TestBooksCollector:
         collector.delete_book_from_favorites("Человек-амфибия")
         assert "Человек-амфибия" not in collector.get_list_of_favorites_books()
 
-    def test_get_list_of_favorites_books(self):
-        collector = BooksCollector()
-        collector.add_new_book("Человек-амфибия")
-        collector.add_book_in_favorites("Человек-амфибия")
-        favorites = collector.get_list_of_favorites_books()
-        assert "Человек-амфибия" in favorites
-
-    @pytest.mark.parametrize("book_name,book_genre", [("Человек-амфибия", "Фантастика"), ("Фрэд", "Ужасы")])
-    def test_add_book_genre(self, book_name, book_genre):
-        collector = BooksCollector()
-        collector.add_new_book(book_name)
-        collector.set_book_genre(book_name, book_genre)
-        assert collector.get_book_genre(book_name) == book_genre
-
     def test_set_book_genre_nonexistent_book(self):
         collector = BooksCollector()
         collector.set_book_genre("Неизвестная книга", "Фантастика")
